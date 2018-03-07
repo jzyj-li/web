@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>css变量</title>
+</head>
+<style>
+    /*
+        css变量的作用域和选择器的作用域类似
+    */
+    /* 变量声明-- */
+    :root {
+        --bg-color: black;
+        --height: 100px;
+    }
+
+    /* 变量使用var() 参数为变量名 */
+    body{
+        background-color: var(--bg-color);
+    }
+
+    .box-slide{
+        color: var(--color);
+        font-size: 20px;
+        margin: 6px;
+    }
+
+    /* calc 用来四则运算 参与运算的不能是字符串*/
+    .box{
+        display: flex;
+        flex-flow: row;
+        height: calc(var(--height) - 10px)
+    }
+
+    /*
+        @supports 判断浏览器是否支持变量
+    */
+    @supports (--a: 0) {
+        /*支持*/
+        body{
+            --color: yellow;
+        }
+    }
+
+    @supports (not (--a: 0)) {
+
+        /*不支持*/
+        body{
+            color: yellow;
+        }
+    }
+</style>
+<body>
+<div class="box">
+    <div class="box-slide">
+        白色
+    </div>
+    <div class="box-slide">
+        黑色
+    </div>
+    <div class="box-slide">
+        红色
+    </div>
+    <div class="box-slide">
+        黄色
+    </div>
+</div>
+</body>
+
+<script>
+    /*
+    * js 判断兼容
+    * */
+    const isSup = window.css && window.CSS.supports && window.CSS.supports('--a', 0)
+
+    /*
+    * js 操作css变量
+    * */
+
+    document.body.style.setProperty('--bg-color', 'pink');
+
+    // 获取内联的样式
+    document.body.style.getPropertyValue('--bg-color');
+
+    // 获取生效的样式 只能获取不能设置
+    window.getComputedStyle(document.getElementsByClassName('.box')[0]).getPropertyValue('--bg-color')
+
+    // 读写都可以
+    document.styleSheets[0].cssRules[0].style.getPropertyValue();
+    document.styleSheets[0].cssRules[0].style.setProperty();
+</script>
+</html>
