@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>es6</title>
+    <script src="../../../loanCommon.js"></script>
+</head>
+<body>
+
+</body>
+
+<script>
+
+    // 解构赋值 从数组和对象中提取值对变量进行赋值 两侧模式匹配即可
+//
+//    let [a, b, c] = [1, 2, 3];
+//    let [x, ,...y] = [1,2,3,4,5,6];
+//
+//    // 对象的解构赋值
+//    let {a, b} = {a: 1, b:2}  // 简写是变量名需与属性名相同
+//    let {c: xx} = {c: 4} // 不同时左右必须是严格相同的模式
+
+    // 解构赋值 如果对象的右边不是对象或数组 优先转化为对象
+
+    //字符串
+    let str = 'abc';
+
+    // 创建锚
+    let dom = str.anchor('ccc');  // 参数默认为字符串 非字符串隐式转为字符串
+    let dom1 = str.anchor([1,2,3]); //  <a name="1,2,3">abc</a>
+    let dom2 = str.anchor({}); // <a name="[object Object]">abc</a>
+    let dom3 = str.anchor(null); // <a name="null">abc</a>
+    let dom4 = str.anchor(undefined); // <a name="undefined">abc</a>
+    let dom5 = str.anchor(true); // <a name="true">abc</a>
+
+    // big() 显示为大号字体
+    let big_str = str.big()
+    document.write(str)
+    document.write(big_str)
+
+    // blink() 显示闪动字符串
+    document.write(str.blink())
+
+    // bold()
+    document.write(str.bold())
+
+    // charAt() 返回指位置的字符串
+    str.charAt('2'); // c
+    str.charAt(2); // c
+    str.charAt('abc'); // a
+
+    // charCodeAt() 返回指定位置的字符串的unicode编码
+    str.charCodeAt(0) // 97
+    str.charCodeAt('0') // 97
+    str.charCodeAt('abc') // 97
+
+    // concat() 连接字符串  非字符串参数转换为字符串
+    str.concat('ff') //abcff
+    str.concat(1) // "abc1"
+    str.concat(true) // "abctrue"
+    str.concat({}) // "abc[object Object]"
+    str.concat([1,2,3]) // "abc1,2,3"
+
+    // fixed()
+    str.fixed()
+
+    // fontcolor() // 字体颜色
+    str.fontcolor('red')
+
+    // fontsize() // 字体大小
+    str.fontsize(20)
+    str.fontsize('20px')
+
+    // fromCharCode()  可接受一个指定的 Unicode 值，然后返回一个字符串
+    String.fromCharCode()
+
+    // indexOf() 检索字符串
+    str.indexOf('a') // 0
+    str.indexOf('d') // -1
+
+    // lastIndexOf() 从后向前检索字符串 返回的结果与indexOf 完全相同
+    str.lastIndexOf('a') // 0
+
+    // link() 字符串转链接
+    str.link('abc') // <a href="abc">abc</a>
+    str.link({}) // "<a href="[object Object]">abc</a>"
+
+    // localeCompare() 用特定的顺序比较字符串
+    str.localeCompare('acb') // -1 str 小于 'acb' 返回值为-1
+    str.localeCompare('abc') // 0  相等返回0
+    'cab'.localeCompare('acb') // 1 'cab' 大于 'acb' 返回1
+
+    // match() 匹配字符串  匹配不到返回null
+    str.match('a')  // ["a", index: 0, input: "abc"] 接受字符串参数
+    str.match(/[a-z]/g) // ["a", "b", "c"] 接受正则表达式
+    str.match(/[a-z]/) // ["a", index: 0, input: "abc"]
+
+    // replace(str/reg, replaceStr) 替换
+    str = '123abc'
+
+    // 参数为字符串
+    str.replace('abc', '456'); // 123456
+    str.replace('abc', function(){return '456'}) // 123456
+
+    // 参数为正则
+    str.replace(/[a-z]/,'4') // "1234bc"
+    str.replace(/[a-z]/g,'4') // "123444"
+
+    str1 = 'abc123'.replace(/([^\d]*)(\d*)/, function (match, p1, p2, offset, string) {
+        /*
+        * match 匹配的字符串这里为 'abc123'
+        * p1 是正则表达式第一个表达式匹配到的字符  'abc'
+        * p2 是正则表达式第二个表达式匹配到的字符  '123'
+        * offset 匹配的字符串在原字符串（'abc123'）中的位置
+        * string 原字符串（'abc123'）
+        * */
+      return [p1, p2].join('-')
+    })
+
+    // str1 = abc-123
+
+    str2 = 'abc123'.replace(/([^\d]*)(\d*)/, '$2$1')  // 123abc $2, $1同p1, p2 相同
+
+    // search()  与indexOf() 一样
+    str.search('123') // 0
+    str.search('1234') // -1
+
+    // slice(start, end) 截取字符串 返回截取的部分
+    str.slice(2) // "3abc" 从2开始到最后
+    str.slice(2,4) // "3a" 截取2到4
+    str.slice(2,-1)  // "3ab" 从2开始到倒数第一个
+    str.slice(-2,-1) // "b"
+    str.slice(-2,2) // ""  截取方向只能从左到右
+
+    // substr(start, length)
+    str.substr(3) // "abc" length不写默认到末尾
+    str.substr(3, 2) // "ab"
+    str.substr(-1) // "c"
+
+    // substring(start, end) 提取字符串的某个部分
+    str.substring(2,4) // "3a"
+    str.substring(-2,4) // "123a" 负数会被转为0
+    str.substring(4,-1) // "123a"
+    str.substring(4,0) // "123a" 截取方向左右都可以
+    str.slice(4,0)  // ""
+
+
+    // small() 与big()相反
+
+    // split(str/reg, length) 字符串转数组
+    str.split('1') //  ["", "23abc"]
+    str.split(/\d/) // ["", "", "", "abc"]
+    str.split(/\d/, 2) // ["", ""] 第二个参数为数组的长度
+
+    // toLocaleLowerCase() toLowerCase() 转小写
+    // toLocaleUpperCase() toUpperCase() 转大写
+
+    // es6 常用方法
+
+    // for of  遍历字符串
+    for (let v of str) {console.log(v)}
+
+    // includes() 与 indexOf()类似返回布尔值
+    str.includes('a') // true
+    str.includes('w') // false
+    str.includes('3', 2)  // true 第二个参数是开始检索的位置范围是知道字符串结束
+
+    // startsWith() // 字符是否处于字符串的头部
+    str.startsWith('1') // true
+    str.startsWith('c') // false
+    str.startsWith('2', 1) // true 第二个参数是开始检索的位置范围是知道字符串结束
+
+    // endsWidth() 字符是否处于字符串的尾部
+    str.endsWith('1') // false
+    str.endsWith('c') // true
+    str.endsWith('1', 1) // true  第二个参数是前几个字符
+
+    // repeat(number) 重复字符串 number重复次数（乡下取整）参数次序 转number - 取整 - 执行
+    str.repeat(2) // "123abc123abc"
+
+    // str.padStart(len, str) 头部 补全字符串 不会改变原字符串 str未指定则是空格
+    str.padStart('10', 'wer') // "werw123abc"
+    str.padStart('3', 'wer') // "123abc"
+
+    // padEnd() 尾部 补全字符串 不会改变原字符串 str未指定则是空格
+    str.padEnd('10', 'wer')
+
+    // matchAll() 返回所有匹配结果
+
+    // 模板字符串
+    let insert_str = '你们'
+    let all_str = `${insert_str}:是我的`
+
+
+</script>
+</html>
