@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>正则</title>
+</head>
+<body>
+
+</body>
+<script>
+    /*
+    *
+    * 正则
+    * */
+
+    // es5  正则
+
+    //创建
+    var reg = /pattern/g;  // 直接量创建
+    var reg2 = new RegExp(pattern, attributes); // new
+
+    // 修饰符 i 不区分大小写匹配 g 全局 m 多行匹配
+
+    /*
+    * 匹配规则
+    * [] 查找括号内的任何字符
+    * . 查找单个字符
+    * \w 查找单词字符（a-z、A-Z、0-9，以及下划线）
+    * \W 查找非单词字符
+    * \d 查找数字
+    * \D 查找非数字
+    * \s 查找空白字符
+    * \S 查找非空白字符
+    * \b 匹配单词边界
+    * \B 匹配非单词边界
+    * 量词
+    * n+ 至少一个
+    * n* 0个或多个
+    * n? 0个或一个
+    * n{x} 匹配包含 X 个 n 的序列的字符串
+    * n{x,y} 匹配包含 X 至 Y 个 n 的序列的字符串
+    * n{x,} 至少x个
+    * n$ n结尾
+    * ^n n 开头
+    * ?=n 与n相邻（后）
+    * ?!n 与n不相邻
+    * */
+
+    str = '12a*dd%bc&12'
+    str.replace(/12/, 'ss') //"ssa*dd%bc&12"
+    str.replace(/[12]/g, 'p') // "ppa*dd%bc&pp"
+    str.replace(/1.a/g, 'p')  // "p*dd%bc&12"
+    str.replace(/1.d/g, 'p') // "12a*dd%bc&12"  .是单个字符多个匹配不成功
+    str.replace(/\w/g, '1')  // "111*11%11&11"
+    str.replace(/\W/g, '1') // "12a1dd1bc112"
+    str.replace(/\d/g, 'B')  // "BBa*dd%bc&BB"
+    str.replace(/\D/g, 'B') // "12BBBBBBBB12"
+    str.replace(/\s/g, 'B') // "12a*dd%bc&12"
+    str.replace(/\S/g, 'B') // "BBBBBBBBBBBB"
+    str.replace(/\b/g, 'B') // B12aB*BddB%BbcB&B12B
+    str.replace(/\B/g, 'B') // 1B2Ba*dBd%bBc&1B2
+    str.replace(/12+/g, 'B') // Ba*dd%bc&B
+
+    // 量词
+    'ddeeed33d'.replace(/d+/g, 'w') // "weeew33w"
+    'ddeeed33d'.replace(/d*/, 'w') // "weeed33d"
+    'ddeeed33d'.replace(/d*/g, 'w') // "wweweweww3w3ww"
+    'ddeeed33d'.replace(/s?/g, 'w') // "wdwdwewewewdw3w3wdw"
+    'ddeeed33d'.replace(/d{2}/g, 'w') // "weeed33d"
+    'ddeeed33d'.replace(/d{1,2}/g, 'w') // "weeew33w"
+    'ddeeed33d'.replace(/d{1,}/g, 'w') // "weeew33w"
+    /d$/.test('ddww')  // false
+    /^d/.test('ddww') // true
+    'ddeeed33d'.replace(/d(?=e)/g, 'w') // "dweeed33d"
+    'ddeeed33d'.replace(/d(?!e)/g, 'w') // "wweeew33w"
+
+    /*
+    *
+    * reg 对象属性
+    * global 是否有g
+    * ignoreCase 是否有i
+    * lastIndex 一个整数，标示开始下一次匹配的字符位置
+    * multiline 是否有m
+    * source 正则表达式的源文本
+    * */
+</script>
+</html>
