@@ -20,7 +20,7 @@
 
     //创建
     var reg = /pattern/g;  // 直接量创建
-    var reg2 = new RegExp(pattern, attributes); // new
+    //var reg2 = new RegExp(pattern, attributes); // new
 
     // 修饰符 i 不区分大小写匹配 g 全局 m 多行匹配
 
@@ -67,13 +67,14 @@
     // 量词
     'ddeeed33d'.replace(/d+/g, 'w') // "weeew33w"
     'ddeeed33d'.replace(/d*/, 'w') // "weeed33d"
-    'ddeeed33d'.replace(/d*/g, 'w') // "wweweweww3w3ww"
+    'ddeeed33d'.replace(/d*/g, 'w') // "wwewe
+    // weww3w3ww"
     'ddeeed33d'.replace(/s?/g, 'w') // "wdwdwewewewdw3w3wdw"
     'ddeeed33d'.replace(/d{2}/g, 'w') // "weeed33d"
     'ddeeed33d'.replace(/d{1,2}/g, 'w') // "weeew33w"
     'ddeeed33d'.replace(/d{1,}/g, 'w') // "weeew33w"
-    /d$/.test('ddww')  // false
-    /^d/.test('ddww') // true
+    // /d$/.test('ddww')  // false
+    // /^d/.test('ddww') // true
     'ddeeed33d'.replace(/d(?=e)/g, 'w') // "dweeed33d"
     'ddeeed33d'.replace(/d(?!e)/g, 'w') // "wweeew33w"
 
@@ -86,5 +87,60 @@
     * multiline 是否有m
     * source 正则表达式的源文本
     * */
+
+    reg3 = /bb/gi;
+    reg3.global // true
+    reg3.ignoreCase // true
+    reg3.lastIndex // 0
+    reg3.multiline // false
+    reg3.source // bb
+
+    /*
+    * reg对象方法
+    * compile() 编译正则表达式
+    * exec() 检索指定的值返回找到的值并确定其位置
+    * */
+    class OperateReg {
+        constructor (str, reg) {
+            this.str = str;
+            this.reg = reg;
+        }
+
+        compileFn (reg) {
+            this.reg.compile(reg)
+        }
+
+        replaceFn (str = 'my') {
+            return this.str.replace(this.reg, str)
+        }
+
+        setStr (str) {
+            this.str = str;
+        }
+
+        execFn () {
+            return this.reg.exec(this.str)
+        }
+        testFn () {
+            return this.reg.test(this.str)
+        }
+    }
+
+    let reg_obj = new OperateReg('i thinking you is my name', /name/g)
+
+    console.log(reg_obj.setStr(reg_obj.replaceFn())) // i thinking you is my my
+    reg_obj.compileFn(/my/g)
+    console.log(reg_obj.replaceFn('tigger')) // i thinking you is tigger tigger
+
+    console.log(reg_obj.execFn()) // ["my", index: 18, input: "i thinking you is my my"]
+    console.log(reg_obj.testFn()) // true
+
+    // es6
+
+    // replace()
+    reg = /(m?)y/g;
+    console.log(reg[Symbol.replace]('my name is lilyi', 'NN')) // NN name is lilNNi
+    console.log(reg[Symbol.match]('bdfygfmy'))  // ["y", "my"]  匹配不到返回null
+
 </script>
 </html>
