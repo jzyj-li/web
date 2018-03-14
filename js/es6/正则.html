@@ -141,6 +141,77 @@
     reg = /(m?)y/g;
     console.log(reg[Symbol.replace]('my name is lilyi', 'NN')) // NN name is lilNNi
     console.log(reg[Symbol.match]('bdfygfmy'))  // ["y", "my"]  匹配不到返回null
+    console.log(reg[Symbol.search]('mddyffmy')) // 3
+    console.log(reg[Symbol.split]('mddyffmy'))   // ["mdd", "", "ff", "m", ""]
+    console.log(reg[Symbol.split]('mddyffmy', 2)) // ["mdd", ""] 与string类似 可以接受第二个参数
 
+
+    class myReg extends RegExp {
+        [Symbol.match] (str) {
+            let result = RegExp.prototype[Symbol.match].call(this, str) // result 是数组或null
+            if (!result) return null;
+            return {
+                group (n){
+                    result[n]
+                }
+            }
+        }
+    }
+
+    var str = '123abc';
+    reg = /(\d+)(\w+)/g
+    console.log(str.match(reg)[0])
+
+    // y 修饰符 与 g 类似 g 匹配字符是没有位置要求只要全局匹配到即可 y 匹配是必须从头开始如果str.charAt(0)返回的字符无法匹配正则便返回null
+
+    reg = /a+/g;
+    reg2 = /a+/y;
+    str = 'aa-a-aaa';
+
+    console.log(reg.exec(str), reg.exec(str)) // ["aa", index: 0, input: "aa-a-aaa"] ["a", index: 3, input: "aa-a-aaa"]
+    console.log(reg2.exec(str), reg2.exec(str)) // ["aa", index: 0, input: "aa-a-aaa"] null(剩余的字符串为'-a-aaa'不是a所以返回null)
+
+    reg = /a+-/g;
+    reg2 = /a+-/y;
+    console.log(reg.exec(str), reg.exec(str)) // ["aa-", index: 0, input: "aa-a-aaa"] ["a-", index: 3, input: "aa-a-aaa"]
+    console.log(reg2.exec(str), reg2.exec(str)) // ["aa-", index: 0, input: "aa-a-aaa"] ["a-", index: 3, input: "aa-a-aaa"]
+
+    // 结合lastIndex
+    const REGX = /a/g;
+    str = '1a2a3abc'
+    REGX.lastIndex = 2;
+    let arr = REGX.exec(str)
+    console.log(arr.index) // 3
+
+    REGX.lastIndex = 4
+    console.log(REGX.exec(str).index) // 5
+
+    const REDYX = /a/y;
+    console.log(REDYX.exec(str)) // null
+
+    REDYX.lastIndex = 2;
+    console.log(REDYX.exec(str)) // null
+
+    REDYX.lastIndex = 1;
+    console.log(REDYX.exec(str)) //["a", index: 1, input: "1a2a3abc"]
+
+    // sticky 是否设置了y修饰符
+    console.log(REDYX.sticky) // true
+
+    // flags 返回修饰符
+    console.log(REDYX.flags) // y
+
+    // 具名组匹配
+    const REG_DATE = /(\d*)-(\d*)-(\d*)/
+    str = '1991-08-03'
+
+    // 普通匹配
+    console.log(REG_DATE.exec(str)) // ["1991-08-03", "1991", "08", "03", index: 0, input: "1991-08-03"]
+
+    // 具明珠匹配
+    REG_DATE.compile(/(?<year>\d*)-(?<month>\d*)-(?<day>\d*)/)
+    console.log(REG_DATE.exec(str))
+
+    // matchAll()
 </script>
 </html>
