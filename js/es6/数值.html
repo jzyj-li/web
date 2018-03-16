@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>数值</title>
+</head>
+<body>
+</body>
+<script>
+    /*
+    *
+    * Number Math
+    * es5 Number
+    *
+    * */
+
+    var num = new Number(5)
+    console.log(num)
+
+    // 属性
+    num.constructor // ƒ Number() { [native code] }
+    Number.MAX_VALUE // 可以表示的最大值
+    Number.MIN_VALUE // 最小值
+    Number.NaN // nan
+    Number.NEGATIVE_INFINITY // 负无穷大溢出时返回
+    Number.POSITIVE_INFINITY // 正无穷大
+
+    // 方法
+    num.toString() // 5
+    num.toString(2) // 101  2进制
+    num.toFixed(2) // 5.00 指定小数点后的位数
+    num = 5.034;
+    num.toFixed(1) // 5.0
+
+    // toExponential() 指数计数法
+    num.toExponential() // 5e+0
+
+    // toPrecision() 将数字格式化为指定的长度
+    num = 5;
+    num.toPrecision(4) // "5.000"
+    num = 5.4444;
+    num.toPrecision(3) // "5.44"
+
+
+    // es6
+    Number.isFinite() // 检测一个数值是否有限 非数值全部为false
+    Number.isFinite(34) // true
+    Number.isFinite('34') // false
+    Number.isNaN(13) //false
+    Number.isNaN(NaN) // true
+    Number.isNaN('NaN') // false
+    isNaN('NaN') // true  全局方法
+    Number.parseInt()
+    Number.parseFloat()
+
+    Number.isInteger() // 判断一个数是否为整数 参数不是数值都是false
+    Number.isInteger(5) // true
+    Number.isInteger('5') // false
+    Number.EPSILON // 标识极小的常量表示
+    Number.MAX_SAFE_INTEGER // js 能够表示的最大安全范围的整数
+    Number.MIN_SAFE_INTEGER // 最小的
+
+    Number.isSafeInteger() // 检测一个数是否落在上述的范围之内
+
+
+    // Math 对象的扩展
+
+    // Math.trunc() 去掉一个数的小数部分保留整数
+    Math.trunc(4.1) // 4
+    Math.trunc(4.6) // 4
+    Math.trunc(true) // 1  先调用number 转数值
+    Math.trunc(false) // 0
+    Math.trunc(null) // 0
+    Math.trunc('123') // 123
+    Math.trunc('foo') // NaN
+    Math.trunc(undefined) // NaN
+
+    // 检验一个数的类型 先调用number() 方法转为数值 失败的返回NaN
+    Math.sign(6) // 1
+    Math.sign(-6) // -1
+    Math.sign(0) // 0
+    Math.sign(-0) // -0
+
+    // Math.cbrt() 计算一个数的立方根
+    Math.cbrt(8) // 2
+
+    // Math.clz32() // 返回一个数的32位无符号整数形式有多少个前导0
+    Math.clz32(0) // 32
+
+    // Math.imul() 方法返回两个数以 32 位带符号整数形式相乘的结果，返回的也是一个 32 位的带符号整数。
+    // Math.fround() 返回一个数的32位单精度浮点数形式
+
+    // Math.hypot() 返回所有参数的平方和的平方根
+    Math.hypot(2,3) // 3.6055512754639896
+
+    // 对数方法
+    Math.expm1(x) // e的x次幂-1
+    Math.expm1(1) // 1.718281828459045
+
+    Math.Math.log1p(x) // 返回1 + x 的自然对数
+    Math.log10(x) // 返回以10为底的x的对数
+    Math.log2(x) // 返回以2为底的X的对数
+
+    /*
+    *
+    * Math.sinh(x) 返回x的双曲正弦
+    * Math.cosh(x) 余弦
+    * Math.tanh(x) 正切
+    * Math.asinh(x) 反双曲正弦
+    * Math.acosh(x) 反双曲余弦
+    * Math.atanh(x) 反双曲正切
+    * */
+
+    // 指数运算符 **
+    2 ** 2 // 4
+    // **= a**=b  a = a**b
+
+
+</script>
+</html>
