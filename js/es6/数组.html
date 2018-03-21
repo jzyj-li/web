@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>数组</title>
+</head>
+<body>
+<div><p>ss</p>我</div>
+<div>是</div>
+<div>谁</div>
+</body>
+<script>
+    // 数组
+
+    // 扩展运算符（...） 将数组转为,号分割的参数序列
+    console.log(...[1,2,3])
+    console.log(...document.querySelectorAll('div'))
+
+    // 替代函数的apply() 方法
+    function f(x, y, z) {
+        console.log(x+y+z)
+    }
+    f.apply(null, [1,2,3])
+
+    f(...[1,2,3])
+
+    console.log(Math.max.apply(null, [1,2,3]))
+    console.log(Math.max(...[1,2,3]))
+
+
+    // 扩展运算符的应用
+    // 复制数组
+    let a1 = [1, 2]
+    let a2 = [...a1];
+    a2[0] = 2;
+    console.log(a1)
+
+    // 合并数组
+    a3 = [...a1, ...a2]
+
+
+    console.log(a3)
+
+    // 将字符串 转为数组
+    console.log([...'hello'])
+
+    // map set generator扩展运算符内部调用的是数据结构的iterator接口，因此只要具有iterator接口的对象，都可以使用扩展运算符
+    let map = new Map([
+        [1, 'one'],
+        [2, 'two'],
+        [3, 'three']
+    ])
+
+    let arr = [...map.keys()]
+    console.log(arr)
+    console.log(map.keys())
+
+    const go = function *() {
+        yield 4;
+        yield 6;
+        yield 7;
+    }
+    console.log([...go()])
+
+    // 方法
+    // Array.form() 用于将类数组对象（dom集合，函数参数 就是有length属性的）和可遍历的对象（set map 字符串）转为真正的对象
+
+    // 类数组对象
+    var arrLike = {
+        '0': 'a',
+        '1': 'b',
+        '2': 'c',
+        length: 3
+    }
+
+    console.log([].slice.call(arrLike)) // es5
+    console.log(Array.from(arrLike)) // es6
+
+    // nodelist
+    Array.from(document.querySelectorAll('div')).filter((el, index) => {
+        console.log(el.textContent)
+    })
+
+    // 字符串
+    console.log(Array.from('hello'))
+    let set = new Set(['a', 'b'])
+    console.log(Array.from(set))
+
+    // Array.of() 将一组值转为数组
+    console.log(Array.of(3, 11, 6))
+
+    // copyWithin() 在当前数组内部将指定位置的成员复制到其他位置，覆盖原成员，返回当前数组也就是会修改原数组
+    console.log([1,2,3,4,5].copyWithin(0, 3)) // 将3号位往后的复制到0号位
+    console.log([1,2,3,4,5].copyWithin(0, 3, 4)) //
+
+    // find(fn) 找出第一个符合条件的数组成员 参数为函数
+    let index = [1,2,3,4].find((n)=>n>3)
+    console.log(index)
+
+    // findIndex() 返回符合成员的位置
+
+    // find() 和 findIndex() 都接受第二个参数用来绑定回调函数的this对象
+
+    // fill() 给定值 填充一个数组
+    [1, 2, 3].fill('e') // ["e", "e", "e"]
+    // 如果填充的是对象那么是同一个内存地址的对象，不是深拷贝对象
+
+    // 数组实例的entries(), keys(), values()
+
+    // keys()对键名的遍历
+    for (let index of ['a', 'b'].keys()) {
+        console.log(index)
+    }
+
+    // 0 1
+
+    // includes() 某个数组是否包含某个给定的值
+
+
+
+</script>
+</html>
