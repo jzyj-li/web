@@ -48,6 +48,56 @@
 
     // 属性的可枚举和遍历
 
+    // symbol 基本类型
+    let s1 = Symbol('foo')
+    console.log(typeof s1)
+
+    // console.log('you is my ' + s1) symbol类型不能与其他的一起运算
+    console.log(String(s1), Boolean(s1))
+
+    // symbol 作为属性名
+    let a = {}
+    a[s1] = 'hello';
+    console.log(a[s1]) // 只能通过字符串的形式获取用symbol类型做属性名的属性的值
+    a = {
+        [Symbol(2)]: 'hello2'
+    }
+    console.log(a[Symbol(2)]) // undefined 这样是访问不到的因为 Symbol(2) != Symbol(2)
+
+    a = {
+        [s1]: 'hello4'
+    }
+    a.s1 = 'hello3'
+    console.log(a.s1, a[s1]) // hello3 hello4 用symbol类型作为属性名时必须放在方括号之中
+
+    // Object.getOwnPropertySymbols() 获取对象的所有symbol属性名
+    let pn = Object.getOwnPropertyNames(a)
+    console.log(pn) // ["s1"]
+    console.log(Object.getOwnPropertySymbols(a)) // [Symbol(foo)]
+    console.log(Reflect.ownKeys(a)) // ["s1", Symbol(foo)] 获取所有的属性名
+
+    // Symbol.for() 获取指定字符串的symbol值
+    console.log(Symbol.for('foo') === s1) // false
+    console.log(Symbol.for('foo') === Symbol.for('foo')) // true
+
+    // 内置的symbol值
+
+    /*  Symbol.hasInstance 指向一个内部方法，当其他对象使用instanceof 运算符，判
+        断是否为该对象的实例时，会调用该方法。
+        foo instanceof Foo 实际调用的是Foo[Symbol.hasInstance](foo)
+    */
+
+//    class MyClass {
+//        [Symbol.hasInstance] (arr) {
+//            return arr instanceOf Array;
+//        }
+//    }
+//
+//    [] instanceOf new MyClass()
+//    [] instanceOf new Array()
+
+    // isConcatSpreadable 结果为布尔值，表示该对象用于Array.prototype.conact() 是否可以展开
+    // Symbol.species() 创建衍生对象时，会使用该属性
 
 
 </script>
