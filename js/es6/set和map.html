@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>set和map</title>
+</head>
+<body>
+</body>
+<script>
+    /*
+    *   set 和 map
+    *   set类似于数组但是成员的值的欧式唯一的，没有重复的值，set本身是一个构造函数，用来生成set数据结构
+    * */
+
+    const s = new Set();
+
+    [2,3,4,5,6,2,3].forEach(x => s.add(x))
+
+    for(let v of s) {
+        console.log(v)
+    }
+
+    console.log(Array.from(s)) // set可以去重 [...new Set(array)]
+    // Set函数接受一个数组（或者具有iterable接口的其他数据结构）作为参数，用来初始化
+    let s1 = new Set([1,2,3,4,4])
+
+    /*
+    *   Set 实例的属性和方法
+    *   属性 Set.prototype.constructor 构造函数，默认就是Set函数
+    *   Set.prototype.size 返回Set实例的成员总数
+    *   方法
+    *       add(value) 添加数据
+    *       delete(value) 删除某个值
+    *       has(value) 返回一个布尔值，表示该值是否为set的成员
+    *       clear() 清空所有
+    *       keys() 返回键名的遍历器
+    *       values() 返回键值得遍历
+    *       entries() 返回键值对的遍历器
+    *       forEach() 使用回调函数遍历每个成员
+    * */
+    let s2 = new Set()
+    s2.add(1);
+    s2.add(2);
+    s2.add(3);
+    console.log(s2)
+    s2.delete(3)
+    console.log(s2)
+    console.log(s2.has(2))
+    console.log(s2.clear())
+    s2 = new Set(['red', 'green', 'black'])
+    console.log(s2.keys()) // {"red", "green", "black"}
+    console.log(s2.values()) // {"red", "green", "black"}
+    console.log(s2.entries()) // {"red", "green", "black"}
+    s2.forEach((v, i) => console.log(v, i))
+
+    // WeakSet 与set 类似 weakSet成员只能是对象，不能是其他类型的值
+    const a = [[1,2],[3,4]]; // 成员必须是对象
+    const ws = new WeakSet(a);
+    console.log(ws)
+
+    ws.add(window)
+
+    console.log(ws)
+    console.log(ws.has(window))
+    console.log(ws.delete(window))
+    console.log(ws)
+
+    // Map 键值对的结合 键可以使任何的数据
+    let m = new Map();
+    let o = {p: 'h'};
+
+    m.set(o, 'content');
+    console.log(m.get(o))
+    m.delete(o)
+    console.log(m.has(o))
+
+    // Map() 也可以接受数组作为参数
+    const map = new Map([
+        ['name', '张三'],
+        ['title', 'Author']
+    ])
+
+    console.log(map.size)// 2
+    console.log(map.has('name'))
+    console.log(map.get('name'))
+    console.log(map.delete('name'))
+    console.log(map)
+
+
+
+</script>
+</html>
