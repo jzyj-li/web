@@ -161,9 +161,9 @@
     // es6 常用方法
 
     // for of  遍历字符串
-    for (let v of str) {console.log(v)}
+    for (let v of str) {console.log(v)};
 
-    // includes() 与 indexOf()类似返回布尔值
+    // includes() 与 indexOf()类似 返回布尔值
     str.includes('a') // true
     str.includes('w') // false
     str.includes('3', 2)  // true 第二个参数是开始检索的位置范围是知道字符串结束
@@ -193,7 +193,59 @@
     // 模板字符串
     let insert_str = '你们'
     let all_str = `${insert_str}:是我的`
+    console.log(all_str)
 
+    // for ... of
+    var arr = [1,2,34], str1 = 'abc', set = new Set([1,2,34]), map = new Map([['name', '张三'], ['title', '李四']]);
+    function parseForOf(obj) {
+        for (let value of obj) {
+            console.log(value)
+        }
+    }
 
+    parseForOf(arr);  // 1 2 34
+    parseForOf(str1); // a b c
+    parseForOf(set); // 1 2 34
+    parseForOf(map); // ["name", "张三"] ["title", "李四"]
+
+    // includes、indexOf的区别
+    function parseIncludes(str, match_str) {
+        let a = str.includes(match_str);
+        let b = str.indexOf(match_str);
+        console.log('includes:' + a, 'indexOf:' + b)
+    }
+
+    parseIncludes('abc', 'c'); // includes:true indexOf:2
+    parseIncludes('abc', '1'); // includes:false indexOf:-1
+
+    // startsWith()
+    function parseStartsWith(str, match_str, index) {
+        let a = str.startsWith(match_str, index?index:0);
+        console.log(a)
+    }
+
+    parseStartsWith('abc', 'a') // true
+    parseStartsWith('abc', 'b') // false
+    parseStartsWith('abc', 'a', 1) // false 1是字符串开始检索的位置
+
+    // endsWith()
+    function parseEndsWith(str, match_str, index) {
+        let a = str.endsWith(match_str, index?index:str.length);
+        console.log(a)
+    }
+
+    parseEndsWith('abc', 'a') // false
+    parseEndsWith('abc', 'c') // true
+    parseEndsWith('abc', 'b', 1) // false
+    parseEndsWith('abc', 'b', 2) // true 2是在前2个字符中检索
+
+    // repeat(number)
+    console.log('abc'.repeat(2)) // abcabc
+    console.log('abc'.repeat('2')) // abcabc
+    console.log('abc'.concat('abc')) // abcabc
+
+    // padStart()
+    console.log('abc'.padStart(10,'123')) // 1231231abc
+    console.log('abc'.padStart(2,'123')) // abc
 </script>
 </html>
