@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>promise</title>
+</head>
+<body>
+</body>
+<script>
+  //   /*
+  //   *
+  //   *   promise
+  //   *   异步编程的一种解决方案。
+  //   *
+  //   * */
+  //   const promise = new Promise(function (reslove, reject) {
+  //       console.log('开始')
+  //       setTimeout(function () {
+  //          reslove(2)
+  //       }, 3000)
+  //   })
+  //
+  //   promise.then(function (value) {
+  //     return 3;
+  //   }).then(function (value) {
+  //
+  //   })
+  //
+  //   //
+  //   let p = new Promise((reslove, reject) => {
+  //     setTimeout(()=>{
+  //        let a = Math.random();
+  //       // if (a>0.5) {
+  //       //   //reslove(a); // 这里说白了是就是调用下面的then中的函数 a
+  //       //   reslove.call(null, a) // 这样也行
+  //       // } else {
+  //       //
+  //       //   reject(a) // 调用b
+  //       // }
+  //        reject(a) // 调用b
+  //     }, 1000)
+  //   })
+  //
+  //   p.then(res => { // 假设这是函数a
+  //     return res;
+  //   }, rej => { // 函数b
+  //     return rej;
+  //   }).then(success => { // 链式调用的重点是前边的then必须return 否则 为undefined
+  //     return success;
+  //   }, fail => {
+  //     return fail;
+  //   })
+  //
+  //   // then() then方法是挂在Promise.prototype上的
+  //   console.log(Promise.prototype) // Promise {constructor: ƒ, then: ƒ, catch: ƒ, finally: ƒ, Symbol(Symbol.toStringTag): "Promise"}
+  //
+  //   // catch（） 相当于 then(null, reject)
+  //  p.then(rel => {
+  //    console.log(rel)
+  //    return rel;
+  //  },rej => {
+  //    console.log(rej + '小')
+  //    return rej;
+  //  }).then(rel => { // 前一个then返回成功或失败都在这里  因为执行catch()后返回一个新的实例该实例该实例执行完之后会变为reslove ，因此后边的catch始终执行不到
+  //    console.log(rel)
+  //    alert(2)
+  //  }).catch(rej => { // 这句是走不到的
+  //    console.log(rej)
+  //    alert(1)
+  //    console.log('二小')
+  //  })
+  //
+  //  // finally() 状态成功或失败 都会执行此操作
+  //  let p1 = new Promise((reslove, reject) => {
+  //    console.log(this) // window 箭头函数本身没有this 因此this指向定义箭头函数时的上下文
+  //    reslove(1);
+  //  })
+  //
+  //  p1.then(res => {
+  //    console.log('success')
+  //  }).finally(res => {
+  //    console.log('finally')
+  //  })
+  //
+  //  // all() 所有实例的状态都改变完才改变
+  //  let p2 = new Promise((reslove, reject) => {
+  //    setTimeout(() => {
+  //      alert(1)
+  //      reslove(1)
+  //    } ,1000)
+  //  })
+  //
+  //  let p3 = new Promise((reslove, reject) => {
+  //    setTimeout(() => {
+  //      alert(2)
+  //      reslove(2)
+  //    } ,2000)
+  //  })
+  //
+  //  let p4 = new Promise((reslove, reject) => {
+  //    setTimeout(() => {
+  //      alert(3)
+  //      reject(3)
+  //    } ,3000)
+  //  })
+  //  Promise.all([p2, p3]).then(res => {
+  //    console.log(res) // [1, 2]
+  //  })
+  //
+  //
+  //  Promise.all([p2, p3, p4]).then(res => {
+  //    console.log(res)
+  //  }).catch(rej => {
+  //    console.log(rej) // 3  只要有一个reject 就走这里 不走上边的then 返回的永远是第一个reject的promise实例
+  //  })
+  //  // race()
+  // Promise.race([p2, p3]).then(res => {
+  //   console.log(res) // 1
+  // })
+
+   // Promise.reslove() 将现有对象转为Promise对象
+
+
+
+   // 实现 promise
+   function MyPromise(fn){ // fn 为 new Promise(fn)
+     let _this = this;
+     _this.status = 'pending';
+     _this.resloveValue = null; // 成功时的数据
+     _this.rejectValue = null; // 失败时的数据
+     _this.resloveFnCallbacks = [];
+     _this.rejectFnCallbacks = [];
+
+     function reslove(value) {
+       if (_this.status == 'pending') {
+            _this.status = 'resloved';
+            _this.resloveValue = value;
+            _this.resloveFnCallbacks.forEach(fn => fn())
+       }
+     }
+     function reject(value) {
+       if (_this.status == 'pending') {
+            _this.status = 'rejected';
+            _this.rejectValue = value;
+            _this.rejectFnCallbacks.forEach(fn => fn())
+       }
+
+    }
+     // 捕获异常
+     try{
+        fn(reslove, reject)
+     } catch (e) {
+       reject(e)
+     }
+
+    }
+
+    // then() 应该接受两个参数 成功 或 失败的 回调
+    MyPromise.prototype.then = function (resloveFn, rejectFn) {
+      let _this = this;
+      let promise2; // then 返回的promise
+
+      // 参数非函数转为函数
+      resloveFn = typeof resloveFn === 'function'? resloveFn: (function (value) {
+        return value;
+      })
+
+      rejectFn = typeof rejectFn === 'function'? rejectFn: function (err) {
+        throw err;
+      }
+
+      if(this.status == 'resloved') { // 成功
+        alert(3)
+        promise2 =  new MyPromise((reslove, reject) => {
+          setTimeout(() => {
+            let x = resloveFn(this.resloveValue);
+            resolvePromise(promise2, x, reslove, reject);
+          })
+        })
+      }
+
+      if(this.status == 'rejected') { // 失败
+        rejectFn(this.rejectValue)
+      }
+
+      if (this.status == 'pending') {
+        this.resloveFnCallbacks.push(function(){
+          resloveFn(_this.resloveValue)
+        })
+        this.rejectFnCallbacks.push(function(){
+          rejectFn(_this.rejectValue)
+        })
+      }
+
+      return promise2;
+
+      // resolvePromise
+      function resolvePromise(promise2, x, reslove, reject) {
+        let called; // 是否调用过
+
+        // 判断上一次then返回的值 实质上下一个then只需要一个值便可以，所以我们就是要将上一个的peomise中的值提取出来
+        // then 返回promise只是为了链式调用，then本身需要一个实际的值，并不需要promise
+        if (x != null && (typeof x === 'object' || typeof x === 'function')) {
+          try {
+              let then = x.then; // 保存x的then方法 这种是x是对象
+              if (typeof then === 'function') {
+                then.call(x, function (y) {
+                  if (called) return;
+                  called = true;
+                  resolvePromise(promise2, y, reslove, reject)
+                }, function (rej) {
+                  if (called) return;
+                  called = true;
+                  reject(rej)
+
+                })
+              } else { // x 是普通对象直接返回就行
+                reslove(x);
+              }
+          } catch (e) {
+            if (called) return;
+            called = true;
+            reject(e)
+          }
+        } else { // x 是普通值
+          reslove(x)
+        }
+      }
+
+
+    }
+
+    // 将promise
+    let p6 = new MyPromise(function(reslove, reject) {
+      reslove(2)
+    })
+    p6.then(function(res){
+        return res;
+    }).then(function(res){
+      alert(res)
+    })
+    //
+    // let p2 = new Promise((reslove, reject) => {
+    //   reslove(1)
+    // })
+    //
+    // console.log(p2.then(res => {
+    //   alert(res)
+    // }))
+
+</script>
+</html>
