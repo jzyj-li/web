@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>reflect</title>
+</head>
+<body>
+
+</body>
+<script>
+    /*
+    *
+    * Reflect 与 Proxy 对象一样，是为了操作对象而提供的新的api
+    * 两者方法完全一样
+    * */
+    let obj = {name: '11'}
+    console.log('name' in obj)
+    console.log(Reflect.has(obj, 'name'))
+
+    let target = {};
+
+    let proxy = new Proxy(target, {
+        get(target, propKey) {
+            if (propKey in target) {
+                console.log('有')
+            } else {
+                console.log('没有')
+            }
+            return Reflect.get(target, propKey)
+        }
+    })
+
+    proxy.a = '1'
+    console.log(target.a)
+    console.log(proxy.a)
+    console.log(proxy.b)
+
+    // Reflect.get()
+
+
+    obj = {
+        name: '13',
+        get age () {
+            return this.name * 10
+        }
+    }
+
+    let obj2 = {
+        name: '10'
+    }
+
+    console.log(Reflect.get(obj, 'name'))
+    console.log(Reflect.get(obj, 'age'))
+    console.log(Reflect.get(obj, 'age', obj2)) // obj2 是this绑定的对象
+
+    // Reflect.set(target, name, value, receiver)
+    Reflect.set(obj, 'sex', 'nan')
+    console.log(obj.sex)
+</script>
+</html>
