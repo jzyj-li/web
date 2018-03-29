@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>遍历器</title>
+</head>
+<body>
+</body>
+<script>
+    /*
+    *
+    * 遍历器
+    * 概念： 遍历器是一种接口，为各种不同的数据结构提供统一的访问机制。
+    * 一种数据只要部署了Iterator 这个接口，我们就认为这种数据是可遍历的，标志是具有Symbol.iterator属性
+    * 原生具备Iterator接口的数据
+    *   Array
+    *   Map
+    *   Set
+    *   String
+    *   TypedArray
+    *   函数的arguments对象
+    *   nodeList对象
+    *
+    * */
+
+    // 数组的Symbol.iterator
+    let arr = [1,2,4,65];
+    let iter = arr[Symbol.iterator]();
+
+    console.log(iter.next())
+
+   // 一个对象如果要具备可被for of 循环调用的Iterator接口，就必须在Symbol.iterator的属性上部署遍历器生成的方法
+    class RangeIterator {
+        constructor(start, stop){
+            this.value = start;
+            this.stop = stop;
+        }
+
+        [Symbol.iterator](){return this}
+
+        next () {
+            let value = this.value;
+            if (value < this.stop) {
+                this.value ++ ;
+                return {done: false, value: value}
+            } else {
+                return {done: true, value: undefined}
+            }
+        }
+    }
+
+    function range(start, stop) {
+       return new RangeIterator(start, stop)
+    }
+
+    for (let v of range(0, 3)) {
+       // console.log(v)
+    }
+    
+    // 遍历器实现指针结构的例子
+    function obj(value) {
+        this.value = value;
+        this.next = null;
+    }
+
+    obj.prototype[Symbol.iterator] = function () {
+        let iterator = {next: next};
+
+        let current = this;
+
+        function next() {
+            if (current) {
+                let value = current.value;
+                current = current.next;
+                return {done: false, value: value};
+            } else {
+                return {done: true}
+            }
+        }
+
+        return iterator;
+    }
+
+    let one = new obj(1);
+    let two = new obj(2);
+    let three = new obj(3);
+
+    one.text = two;
+    two.next = three;
+
+    for (let i of one) {
+        console.log(i)
+    }
+
+    // 对于类数组的对象（存在键值名和length属性），部署iterator接口，有一个简单的方法，就是Symbol.iterator 方法直接引用数组的Iterator接口
+    NodeList.prototype[Symbol.iterator] = Array.prototype[Symbol.iterator];
+
+    // 或者
+    NodeList.prototype[Symbol.iterator] = [][Symbol.iterator];
+
+    // 默认调用iterator的场合
+    /*
+    * 解构赋值
+    * 扩展运算符
+    * yield*
+    * 数组的遍历会调用遍历器的接口，所以任何接受数组为参数的场合，都会调用遍历器接口
+    *
+    * */
+
+    // 字符串的iterator 接口
+    let str = 'adf';
+    let str_iterator = str[Symbol.iterator]();
+
+    console.log(str_iterator.next(), str_iterator.next(), str_iterator.next())
+
+    // 遍历器对象的return() throw()
+
+</script>
+</html>
