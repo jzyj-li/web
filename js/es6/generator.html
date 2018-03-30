@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>generator</title>
+</head>
+<body>
+</body>
+<script>
+    /*
+    *
+    * generator 函数是es6提供的一种异步编程解决方案
+    * 只有调用函数的next()方法的时候函数才会执行
+    * */
+    
+    function* getUserName() {
+        yield 'li';
+        yield 'wang';
+        return 'ending'
+    }
+
+    let hw = getUserName()
+    console.log(hw.next())
+    console.log(hw.next())
+    console.log(hw.next())
+
+    // yield 必须用在generator 函数中 不能再其他函数中
+
+//    function* test () { /
+//        (function () {
+//            yield '33' yield 的直属必须为generator 函数
+//        })()
+//    }
+   // yield 可以在for循环zhong
+    function *test() {
+        let arr = [1,2,3,4];
+        for(let v=0;v<arr.length;v++) {
+            console.log(v)
+            yield arr[v]
+        }
+    }
+
+   // let test = test() // 报错 已经定义过 Identifier 'test' has already been declared
+    let test1 = test();
+    [1,2,3,4].forEach((n)=>{
+        console.log(test1.next())
+    })
+   // yield 如果在表达式之中 一定要在圆括号里
+    try {
+        function *test2() {
+           // console.log( 'ss' + yield 2) // Unexpected identifier
+        }
+    } catch (e) {
+        console.log(e)
+    }
+
+    try {
+        function *test2() {
+            console.log( 'ss' + (yield 2)) // 正确  yield 必须自成表达式
+        }
+    } catch (e) {
+        console.log(e)
+    }
+
+    //  yield 可以用做函数参数或放在表达式的右边
+
+    // 与遍历器的关系 iterator
+    var obj = {}
+    obj[Symbol.iterator] = function *() {
+        yield 1;
+        yield 2;
+        yield 3;
+    }
+
+    console.log([...obj])
+
+    // next() 方法的参数 yield 本身没有返回值，next可以带一个参数当成上一个yield的返回值
+    function *test3(num) {
+        let y = 2* (yield(num + 1));
+        let z = yield (y/3);
+        return (y + z)
+    }
+    var testNext = test3(3);
+    console.log(testNext.next()); //  4 调用next方法的返回值是yield 后面的值
+    //console.log(testNext.next()) // NaN
+    console.log(testNext.next(6)) // 4 next() 传了参数代表上一个yield的返回值，因此 y = 2* 6 = 12 所以z = 4;
+
+    // for of 会遍历generator 函数生成的对象，因此不需要next方法
+    function *foo() {
+        yield 1;
+        yield 2;
+        yield 3;
+        yield 4;
+    }
+
+    for (let v of foo()) {
+        console.log(v)
+    }
+
+    // yield *
+
+    // 1 yield* 可以在一个generator函数中执行另一个generator函数 yield*后边必须是一个函数
+    function *bar() {
+        yield 3;
+        //foo(); // 没有用
+        yield * foo(); // 可以
+        yield 4;
+        return 'ff'; // return 是不会被for of遍历出来的
+    }
+
+    for (let v of bar()) {
+        console.log(v)
+    }
+
+    // yield * 的用处
+
+    // 遍历嵌套数组
+    function *iterTree (tree) {
+        if (Array.isArray(tree)) {
+            for (let v =0;v< tree.length;v++) {
+                yield* iterTree(tree[v]);
+            }
+        }
+    }
+
+    for (let v of iterTree([1,2,[3,4],[444]])) {
+        console.log(v)
+    }
+
+    /*
+    *
+    * yield* 遍历完全二叉树
+    * */
+    class Tree {
+        constructor (left, label, right) {
+            this.left = left;
+            this.label = label;
+            this.right = right;
+        }
+
+        * inorder(t){
+            if (t) {
+                yield* inorder(t.left);
+                yield* t.label;
+                yield* inorder(t.right);
+            }
+        }
+
+        make(array){
+            if (array.length == 1) {
+
+            }
+        }
+    }
+
+</script>
+
+
+</html>
