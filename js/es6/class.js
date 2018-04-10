@@ -123,3 +123,95 @@ class F{
     }
 }
 new F()
+
+/*class 继承
+es5 通过修改原型链继承
+es6 通过extends实现继承*/
+
+// es5
+function ParentG() {
+    this.x = 1;
+    this.y = 2;
+    this.add = function () {
+        console.log(1)
+    }
+}
+
+function childG() {}
+childG.prototype = new ParentG(); // 通过改变原型对象实现继承
+console.log(new childG().add())
+
+// es6
+class ParentH {
+    constructor () {
+        this.x = 21;
+    }
+    add () {
+        console.log(2)
+    }
+}
+
+class childH extends ParentH { // extends 实现继承
+}
+console.log(new childH().x)
+
+// super 获取父类的this 必须在子类的构造函数中调用super() super内部的this指向子类的实例
+class parentJ {
+    constructor () {
+        this.a = 1;
+        this.b = 2;
+    }
+    add () {
+        return 'add'
+    }
+}
+
+class childJ extends parentJ{
+    constructor (a, b) {
+        super(a, b); // 继承的子类没有this必须调用super
+        this.c = 3;
+    }
+    add () {
+        console.log('子类' + super.add())
+    }
+}
+console.log(new childJ().add())
+
+/*
+* 区别 es5的继承只是改写子类的原型对象本质上子类和父类是独立的连个对象
+* es6的继承只是对父类的改写或补充，子类没有this
+* */
+
+// Object.getPrototypeOf() 从子类上获取父类
+let parentClass = Object.getPrototypeOf(childH)
+console.log(parentClass) // [Function: ParentH]
+
+// 类的prototype 和 __proto__ 下面我们将这两个属性成为a和b
+// es5 中每个对象都有a和b属性，对象的b属性指向创建对象的构造函数的a属性即构造函数的原型对象
+
+function L() {}
+let l = new L();
+l.__proto__ == L.prototype;
+
+// es6 的Class 也具有prototype和__proto__属性
+// 子类的__proto__ 属性表示构造函数的继承总是指向父类
+// 子类的prototype属性的__proto__的属性表示方法的继承，总是指向父类的prototype
+class ParentY {}
+class ChildY extends ParentY {}
+console.log(ChildY.__proto__ === ParentY) // true
+console.log(ChildY.prototype.__proto__ === ParentY.prototype) // true
+
+// 继承的原理
+Object.setPrototypeOf(ChildY.prototype, ParentY.prototype) // 子类的实例继承父类的实例
+Object.setPrototypeOf(ChildY, ParentY) // 子类继承父类的静态属性
+
+// setPrototypeOf 的实现方法
+Object.setPrototypeOf = function (obj, proto) {
+    obj.__proto__ = proto;
+    return obj;
+}
+
+// 子类作为对象时，子类的原型父类，作为构造函数，子类的原型对象时父类原型对象的实例（和es5实现继承一样）
+
+// extends 的继承目标
+
