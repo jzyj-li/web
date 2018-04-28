@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>TA问</title>
+</head>
+<body>
+
+<h1>太极图loading</h1>
+<div class="circle">
+    <div class="left white">
+        <div class="small white top">
+            <div class="circle1 black"></div>
+        </div>
+    </div>
+    <div class="right black">
+        <div class="small black bottom">
+            <div class="circle1 white">
+
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .circle {
+        width: 200px;
+        height: 200px;
+        background-color: pink;
+        border-radius: 50%;
+        border: 1px solid black;
+        display: flex;
+        flex-flow: row;
+        overflow: hidden;
+        animation-duration: 3s;
+        animation-name: taiji;
+        animation-iteration-count: 100;
+        animation-timing-function: linear;
+    }
+    .small {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        background-color: white;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .left, .right {
+        position: relative;
+        width: 100px;
+        height: 200px;
+    }
+
+    .white {
+        background-color: white;
+    }
+    .black {
+        background-color: black;
+    }
+    .top {
+        right:-50px;
+        top: 0;
+        z-index: 100;
+    }
+    .bottom {
+        left: -50px;
+        bottom: 0 ;}
+    .circle1 {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+    }
+
+    /*动画*/
+    @keyframes taiji {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+</style>
+</body>
+
+</html>
