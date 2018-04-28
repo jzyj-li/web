@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>发布和订阅模式</title>
+</head>
+<body>
+
+</body>
+<script>
+    /*
+    * 发布和订阅 响应式编程
+    * 首先指定发布者
+    * 给发布者添加缓存列表用于存放回调函数以便通知订阅者
+    * 发布消息是时发布者遍历缓存列表，依次触发里面存放的的订阅者回到函数
+    * */
+
+//    let salesOffices = {}; // 售楼处 即 发布者
+//    salesOffices.clientList = []; // 缓存列表 存放订阅者的回调函数
+//
+//    salesOffices.listen = (fn) => { // 增加订阅者
+//        salesOffices.clientList.push(fn); // 订阅的消息加进缓存列表
+//    }
+//
+//    salesOffices.trigger = (arguments) => {
+//        salesOffices.clientList.forEach((fn) => { // arguments 是trigger函数接受的参数
+//            fn.call(this, arguments)
+//        })
+//    }
+//
+//    salesOffices.listen((price) => {
+//        console.log('小明的消息' + price)
+//    })
+//
+//    salesOffices.listen((price) => {
+//        console.log('小芳的消息' + price)
+//    })
+//
+//    salesOffices.trigger(100)
+//    salesOffices.trigger(200)
+//
+//    /*
+//    * 假设小明只想接受100的消息
+//    * 那我们就要在添加订阅这的时候计入标识
+//    * */
+//    let salesOffices = {}; // 售楼处 即 发布者
+//    salesOffices.clientList = {}; // 缓存列表 存放订阅者的回调函数
+//
+//    salesOffices.listen = (key, fn) => { // 增加订阅者
+//        if (!salesOffices.clientList[key]) {
+//            salesOffices.clientList[key] = [];
+//        }
+//        salesOffices.clientList[key].push(fn); // 订阅的消息加进缓存列表
+//    }
+//
+//    salesOffices.trigger = (arg1, ...arg2) => {
+//        let key = arg1;
+//        let fns = salesOffices.clientList[key];
+//
+//        if (!fns || fns.length === 0) { // 没有订阅该消息
+//            return false;
+//        }
+//
+//        fns.forEach((v) => {
+//            v.call(this, arg2) // arguments 指的是回调函数的
+//        })
+//    }
+//
+//    salesOffices.listen(100,(price) => {
+//        console.log('小明的消息' + price)
+//    })
+//
+//    salesOffices.listen(200,(price) => {
+//        console.log('小芳的消息' + price)
+//    })
+//
+//    salesOffices.trigger(100, 2000) // 发布100
+//    salesOffices.trigger(200, 3000) // 发布200
+
+
+    /*
+    * 观察者类
+    * */
+    class Oberver {
+        constructor () {
+         this.clientList = {};
+         this.stack = [];
+        }
+        listen (key, fn) { // key 事件名
+            if (!this.clientList[key]) {
+                this.clientList[key] = [];
+            }
+
+            this.clientList[key].push(fn);
+            this.stack.forEach((v, index) => {
+                v(key, index)
+            })
+
+        };
+        trigger (arg1, ...arg2) {
+            let key = arg1;
+            let fns = this.clientList[key];
+
+            if (!fns || fns.length === 0) {
+                this.stack.push((key, index) => {
+                    if (key == arg1) {
+                        this.trigger(arg1, arg2);
+                        this.stack.splice(index, 1);
+                    }
+                });
+                return false;
+            }
+
+            fns.forEach(v=> {
+                v.call(this, arg2)
+            })
+        }
+    }
+
+    // 删除订阅
+    Oberver.prototype.remove = function (key, fn) {
+        var fns = this.clientList[key];
+
+        if (!fns) {
+            return false;
+        }
+        if (!fn) {
+            fns && (fns.length = 0); // 没有fn标识删除所有的订阅消息属于key的
+        } else {
+            fns = fns.filter(v => {
+                return v != fn
+            })
+        }
+
+        return fns;
+    }
+    /*
+    * 添加具体的订阅发布
+    * */
+    var salesOffices = new Oberver();
+
+    salesOffices.listen(100, function (prices) {
+        console.log('我是小明我订阅了100的信息' + prices)
+    })
+
+    salesOffices.listen(200, function (proces) {
+        console.log('我是小芳我订阅了200的信息' + proces)
+    })
+
+    // 发布
+    salesOffices.trigger(100, 3000)
+
+    console.log(salesOffices)
+//    salesOffices.trigger('100', '是100的');
+//    salesOffices.trigger('200', '是200的');
+//
+//
+//    salesOffices.listen('100', function (p) {
+//        console.log('我订阅了我是小龙' + p)
+//    })
+//
+//    salesOffices.listen('100', function (p) {
+//        console.log('我订阅了我是小红' + p)
+//    })
+//    salesOffices.trigger('100', '是5000')
+//    salesOffices.listen('200', function (p) {
+//        console.log('我订阅了我是小方' + p)
+//    })
+    /*
+    * 适用模式 一对多 （多个模块需要登录后操作）
+    * 只需要关注状态的改变（只要订阅登录成功的消息就行）
+    * 两个封装模块之间通信
+    * */
+
+    // 先发布 后订阅
+
+</script>
+</html>
